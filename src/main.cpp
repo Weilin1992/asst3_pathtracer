@@ -1,3 +1,8 @@
+
+
+#include <iostream>
+#include <unistd.h>
+
 #include "CMU462/CMU462.h"
 #include "CMU462/viewer.h"
 
@@ -6,9 +11,6 @@
 
 #include "application.h"
 #include "image.h"
-
-#include <iostream>
-#include <unistd.h>
 
 using namespace std;
 using namespace CMU462;
