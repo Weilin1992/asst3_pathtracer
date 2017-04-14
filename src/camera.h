@@ -68,6 +68,8 @@ class Camera {
   double aspect_ratio() const { return ar; }
   double near_clip() const { return nClip; }
   double far_clip() const { return fClip; }
+	size_t	screen_w() const{return screenW;}
+	size_t	screen_h() const{return screenH;}
 
   /**
    * Returns a world-space ray from the camera that corresponds to a

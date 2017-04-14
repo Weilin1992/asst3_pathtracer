@@ -27,6 +27,7 @@ void usage(const char* binaryName) {
   printf("  -e  <PATH>       Path to environment map\n");
   printf("  -h               Print this help message\n");
   printf("\n");
+
 }
 
 HDRImageBuffer* load_exr(const char* file_path) {

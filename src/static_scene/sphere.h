@@ -91,6 +91,19 @@ class Sphere : public Primitive {
    */
   bool test(const Ray& ray, double& t1, double& t2) const;
 
+	inline bool solveQuadratic(const double &a,const double &b, const double &c, double &x0, double &x1) const {
+		double discr = b * b - 4 * a * c;
+		if (discr < 0) return false;
+		else if (discr == 0) x0 = x1 = - 0.5 * b / a;
+		else {
+			double q = sqrt(discr);
+			x0 = (-b+q)*0.5/a;
+			x1 = (-b-q)*0.5/a;
+		}
+		if (x0 > x1) std::swap(x0, x1);
+		return true;
+	}
+
   const SphereObject* object; ///< pointer to the sphere object
 
   Vector3D o; ///< origin of the sphere

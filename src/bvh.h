@@ -3,7 +3,7 @@
 
 #include "static_scene/scene.h"
 #include "static_scene/aggregate.h"
-
+#include <stack>
 #include <vector>
 
 namespace CMU462 { namespace StaticScene {
@@ -92,7 +92,6 @@ class BVHAccel : public Aggregate {
              false otherwise
    */
   bool intersect(const Ray& r, Intersection* i) const;
-
   /**
    * Get BSDF of the surface material
    * Note that this does not make sense for the BVHAccel aggregate
@@ -101,10 +100,10 @@ class BVHAccel : public Aggregate {
    */
   BSDF* get_bsdf() const { return NULL; }
 
-  /**
-   * Get entry point (root) - used in visualizer
-   */
-  BVHNode* get_root() const { return root; }
+	/**
+	 * Get entry point (root) - used in visualizer
+	 */
+  BVHNode* get_root() const;
 
   /**
    * Draw the BVH with OpenGL - used in visualizer
@@ -118,6 +117,13 @@ class BVHAccel : public Aggregate {
 
  private:
   BVHNode* root; ///< root node of the BVH
+	void find_closest_hit(const Ray &ray, BVHNode *node, Intersection *i) const;
+
+	bool splitNode(BVHNode *parent, std::vector<Primitive *> &prims);
+
+	void buildBVH(std::vector<Primitive*> &b,size_t max_size_of_leaf);
+
+	Vector2D planeCost(std::vector<Primitive*> &prims, int axis, BVHNode *parent);
 };
 
 } // namespace StaticScene

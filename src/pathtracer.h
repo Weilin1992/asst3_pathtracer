@@ -6,7 +6,7 @@
 #include <atomic>
 #include <vector>
 #include <algorithm>
-
+#include <math.h>
 #include "CMU462/timer.h"
 
 #include "bvh.h"
@@ -57,7 +57,7 @@ class PathTracer {
    * Default constructor.
    * Creates a new pathtracer instance.
    */
-  PathTracer(size_t ns_aa = 1, 
+  PathTracer(size_t ns_aa = 1,
              size_t max_ray_depth = 4, size_t ns_area_light = 1,
              size_t ns_diff = 1, size_t ns_glsy = 1, size_t ns_refr = 1,
              size_t num_threads = 1,
@@ -217,7 +217,7 @@ class PathTracer {
 
   // Integration state //
 
-  vector<int> tile_samples; ///< current sample rate for tile
+  std::vector<int> tile_samples; ///< current sample rate for tile
   size_t num_tiles_w;       ///< number of tiles along width of the image
   size_t num_tiles_h;       ///< number of tiles along height of the image
 

@@ -85,7 +85,8 @@ void PathTracer::set_scene(Scene *scene) {
   }
 
   if (this->envLight != nullptr) {
-    scene->lights.push_back(this->envLight);
+	SceneLight *l = this->envLight;
+	scene->lights.push_back(l);
   }
 
   this->scene = scene;
@@ -215,34 +216,36 @@ void PathTracer::start_raytracing() {
   fprintf(stdout, "[PathTracer] Rendering... "); fflush(stdout);
   for (int i=0; i<numWorkerThreads; i++) {
       workerThreads[i] = new std::thread(&PathTracer::worker_thread, this);
+			cout<<numWorkerThreads<<endl;
   }
 }
 
 
-void PathTracer::build_accel() {
+		void PathTracer::build_accel() {
 
-  // collect primitives //
-  fprintf(stdout, "[PathTracer] Collecting primitives... "); fflush(stdout);
-  timer.start();
-  vector<Primitive *> primitives;
-  for (SceneObject *obj : scene->objects) {
-    const vector<Primitive *> &obj_prims = obj->get_primitives();
-    primitives.reserve(primitives.size() + obj_prims.size());
-    primitives.insert(primitives.end(), obj_prims.begin(), obj_prims.end());
-  }
-  timer.stop();
-  fprintf(stdout, "Done! (%.4f sec)\n", timer.duration());
+			// collect primitives //
+			fprintf(stdout, "[PathTracer] Collecting primitives... "); fflush(stdout);
+			timer.start();
+			vector<Primitive *> primitives;
+			for (SceneObject *obj : scene->objects) {
+				const vector<Primitive *> &obj_prims = obj->get_primitives();
+				primitives.reserve(primitives.size() + obj_prims.size());
+				primitives.insert(primitives.end(), obj_prims.begin(), obj_prims.end());
+			}
+			timer.stop();
+			fprintf(stdout, "Done! (%.4f sec)\n", timer.duration());
 
-  // build BVH //
-  fprintf(stdout, "[PathTracer] Building BVH... "); fflush(stdout);
-  timer.start();
-  bvh = new BVHAccel(primitives);
-  timer.stop();
-  fprintf(stdout, "Done! (%.4f sec)\n", timer.duration());
+			// build BVH //
+			fprintf(stdout, "[PathTracer] Building BVH... "); fflush(stdout);
 
-  // initial visualization //
-  selectionHistory.push(bvh->get_root());
-}
+			timer.start();
+			bvh = new BVHAccel(primitives);
+			timer.stop();
+			fprintf(stdout, "Done! (%.4f sec)\n", timer.duration());
+
+			// initial visualization //
+			selectionHistory.push(bvh->get_root());
+		}
 
 void PathTracer::log_ray_miss(const Ray& r) {
     rayLog.push_back(LoggedRay(r, -1.0));
@@ -497,11 +500,20 @@ Spectrum PathTracer::raytrace_pixel(size_t x, size_t y) {
   // TODO:
   // Sample the pixel with coordinate (x,y) and return the result spectrum.
   // The sample rate is given by the number of camera rays per pixel.
+	//std::cout<<"x"<<x<<"y"<<y<<std::endl;
 
-  int num_samples = ns_aa;
+  size_t num_samples = ns_aa;
 
-  Vector2D p = Vector2D(0.5,0.5);
-  return trace_ray(camera->generate_ray(p.x, p.y));
+
+  size_t w = this->camera->screen_w();
+  size_t h= this->camera->screen_h();
+
+  double xx = (x)/(double)w;
+  double yy = (y)/(double)h;
+
+  Vector2D p = Vector2D(xx,yy);
+
+  return trace_ray(camera->generate_ray(xx,yy));
 
 }
 

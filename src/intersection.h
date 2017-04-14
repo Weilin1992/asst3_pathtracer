@@ -29,6 +29,8 @@ struct Intersection {
 
   BSDF* bsdf; ///< BSDF of the surface at point of intersection
 
+	bool isfronthit; /// if the ray hit the front face of the triangle or something else
+
   // More to follow.
 };
 

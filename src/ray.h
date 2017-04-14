@@ -71,9 +71,9 @@ struct Ray {
 // structure used for logging rays for subsequent visualization
 struct LoggedRay {
 
+
     LoggedRay(const Ray& r, double hit_t)
         : o(r.o), d(r.d), hit_t(hit_t) {}
-
     Vector3D o;
     Vector3D d;
     double hit_t;
